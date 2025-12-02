@@ -1,9 +1,3 @@
-import streamlit as st
-from groq import Groq
-from PIL import Image
-import pandas as pd
-import io
-
 # Inisialisasi Groq Client
 client = Groq(api_key=GROQ_API_KEY)
 
