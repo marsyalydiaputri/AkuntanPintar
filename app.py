@@ -1,6 +1,5 @@
 import streamlit as st
 from groq import Groq
-from groq_key import GROQ_API_KEY
 from PIL import Image
 import pandas as pd
 import io
