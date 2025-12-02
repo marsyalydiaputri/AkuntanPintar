@@ -1,21 +1,19 @@
 import streamlit as st
 import requests
+import os
 
 st.set_page_config(page_title="Akuntan Pintar AI", page_icon="📘")
 
 st.title("📘 Akuntan Pintar AI")
 st.write("Aplikasi Akuntansi cerdas berbasis Streamlit + Groq API.")
 
-# Input API Key
-api_key = st.text_input("Masukkan Groq API Key kamu:", type="password")
+# Ambil API Key dari Streamlit Secrets
+api_key = os.getenv("GROQ_API_KEY")
 
-# Input prompt
 prompt = st.text_area("Masukkan perintah atau pertanyaan akuntansi:")
 
 if st.button("Jalankan AI"):
-    if not api_key:
-        st.warning("Masukkan API key terlebih dahulu.")
-    elif not prompt:
+    if not prompt:
         st.warning("Masukkan prompt.")
     else:
         headers = {
