@@ -29,12 +29,12 @@ if st.button("Jalankan AI"):
         }
 
         data = {
-            "model": "llama3-8b-8192",
-            "messages": [
-                {"role": "system", "content": "You are an accounting assistant."},
-                {"role": "user", "content": prompt}
-            ]
-        }
+    "model": "llama3-70b-8192",
+    "messages": [
+        {"role": "system", "content": "You are an accounting assistant."},
+        {"role": "user", "content": prompt}
+    ]
+}
 
         response = requests.post(
             "https://api.groq.com/openai/v1/chat/completions",
