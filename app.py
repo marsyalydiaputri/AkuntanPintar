@@ -2,58 +2,24 @@ import streamlit as st
 import requests
 import os
 
-# Page config
-st.set_page_config(page_title="Akuntan Pintar AI", page_icon="📘", layout="centered")
+st.set_page_config(page_title="Akuntan Pintar AI", page_icon="📘")
 
-# Custom CSS for better UI
-st.markdown("""
-    <style>
-        .title {
-            text-align: center;
-            font-size: 40px;
-            font-weight: 700;
-            color: #0D47A1;
-        }
-        .subtitle {
-            text-align: center;
-            font-size: 18px;
-            color: #555;
-            margin-bottom: 25px;
-        }
-        .stTextArea textarea {
-            height: 120px !important;
-        }
-        .result-box {
-            background-color: #F7F9FC;
-            border: 1px solid #d0d7de;
-            padding: 18px;
-            border-radius: 10px;
-            margin-top: 15px;
-        }
-        .run-btn button {
-            width: 100%;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 18px;
-            padding: 10px;
-        }
-    </style>
-""", unsafe_allow_html=True)
+st.title("📘 Akuntan Pintar AI")
+st.write("Asisten Akuntansi Cerdas berbasis AI")
 
-# Header
-st.markdown('<div class="title">📘 Akuntan Pintar AI</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">Asisten Akuntansi Cerdas berbasis AI</div>', unsafe_allow_html=True)
-
-# Input prompt
-prompt = st.text_area(
-    "Masukkan perintah atau pertanyaan akuntansi:",
-    placeholder="Contoh: Buat jurnal untuk pembelian persediaan Rp 5.000.000 secara kredit"
-)
-
+# Ambil API Key dari environment (Streamlit Cloud Secrets)
 api_key = os.getenv("GROQ_API_KEY")
 
-# Button to run AI
-if st.button("Jalankan AI", key="run_btn"):
+if not api_key:
+    st.error("API Key tidak ditemukan! Pastikan sudah diatur di Secrets.")
+    st.stop()
+
+prompt = st.text_area(
+    "Masukkan perintah atau pertanyaan akuntansi:",
+    placeholder="Contoh: Buat jurnal pembelian persediaan Rp 50.000.000 secara kredit"
+)
+
+if st.button("Jalankan AI"):
     if not prompt:
         st.warning("Masukkan prompt terlebih dahulu.")
     else:
@@ -76,8 +42,17 @@ if st.button("Jalankan AI", key="run_btn"):
             json=data
         )
 
-        result = response.json()
+        try:
+            result = response.json()
 
-        # Display result in styled box
-        st.markdown("### Hasil:")
-        st.markdown(f"<div class='result-box'>{result['choices'][0]['message']['content']}</div>", unsafe_allow_html=True)
+            if "choices" in result:
+                st.success("Berhasil!")
+                st.write("### Hasil:")
+                st.write(result["choices"][0]["message"]["content"])
+            else:
+                st.error("Terjadi kesalahan API!")
+                st.code(result)
+
+        except Exception as e:
+            st.error("Error memproses response!")
+            st.write(str(e))
