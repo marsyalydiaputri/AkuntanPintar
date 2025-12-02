@@ -28,8 +28,8 @@ if st.button("Jalankan AI"):
             "Authorization": f"Bearer {api_key}"
         }
 
-        data = {
-    "model": "llama3-70b-8192",
+       data = {
+    "model": "llama3-70b-versatile",
     "messages": [
         {"role": "system", "content": "You are an accounting assistant."},
         {"role": "user", "content": prompt}
